@@ -66,13 +66,13 @@ class StockRequestOrder(models.Model):
         required=True,
     )
     location_id = fields.Many2one(
-    comodel_name="stock.location",
-    string="Location",
-    domain="not allow_virtual_location and "
-    "[('usage', 'in', ['internal', 'transit']), ('usage', '!=', 'production')] or []",
-    ondelete="cascade",
-    required=True,
-    )
+        comodel_name="stock.location",
+        string="Location",
+        domain="not allow_virtual_location and "
+        "[('usage', 'in', ['internal', 'transit']), ('usage', '!=', 'production')] or []",
+        ondelete="cascade",
+        required=True,
+        )
     allow_virtual_location = fields.Boolean(
         related="company_id.stock_request_allow_virtual_loc", readonly=True
     )
