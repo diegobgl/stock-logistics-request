@@ -151,10 +151,12 @@ class StockRequestOrder(models.Model):
     def _compute_route_ids(self):
         for record in self:
             if record.warehouse_id:
-                routes = self.env['stock.location.route'].sudo().search([
+                # Reemplazamos 'stock.location.route' por 'stock.route'
+                routes = self.env['stock.route'].sudo().search([
                     ('warehouse_ids', 'in', record.warehouse_id.id)
                 ])
                 record.route_ids = routes
+
 
     def get_parents(self):
         location = self.location_id
@@ -234,10 +236,10 @@ class StockRequestOrder(models.Model):
                 self.with_context(no_change_childs=True).onchange_warehouse_id()
         self.change_childs()
 
-    @api.onchange('warehouse_id')
     def _onchange_warehouse_id(self):
         if self.warehouse_id:
-            routes = self.env['stock.location.route'].sudo().search([
+            # Reemplazamos 'stock.location.route' por 'stock.route'
+            routes = self.env['stock.route'].sudo().search([
                 ('warehouse_ids', 'in', self.warehouse_id.id)
             ])
             self.route_ids = routes.ids
