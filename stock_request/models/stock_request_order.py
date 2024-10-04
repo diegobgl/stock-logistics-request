@@ -147,38 +147,14 @@ class StockRequestOrder(models.Model):
         ("name_uniq", "unique(name, company_id)", "Stock Request name must be unique")
     ]
 
-    @api.depends("warehouse_id", "location_id", "stock_request_ids")
+    @api.depends('warehouse_id')
     def _compute_route_ids(self):
-        route_obj = self.env["stock.route"]
-        routes = route_obj.search(
-            [("warehouse_ids", "in", self.mapped("warehouse_id").ids)]
-        )
-        routes_by_warehouse = {}
-        for route in routes:
-            for warehouse in route.warehouse_ids:
-                routes_by_warehouse.setdefault(warehouse.id, self.env["stock.route"])
-                routes_by_warehouse[warehouse.id] |= route
         for record in self:
-            routes = route_obj
-            if record.warehouse_id and routes_by_warehouse.get(record.warehouse_id.id):
-                routes |= routes_by_warehouse[record.warehouse_id.id]
-            parents = record.get_parents().ids
-            valid_routes = []
-            for route in routes:
-                if any(p.location_dest_id.id in parents for p in route.rule_ids):
-                    valid_routes.append(route)
-            filtered_routes = self.env["stock.route"].browse(
-                [route.id for route in valid_routes]
-            )
-            if record.stock_request_ids:
-                all_routes = record.stock_request_ids.mapped("route_ids")
-                common_routes = all_routes
-                for line in record.stock_request_ids:
-                    common_routes &= line.route_ids
-                final_routes = filtered_routes | common_routes
-                record.route_ids = [(6, 0, final_routes.ids)]
-            else:
-                record.route_ids = [(6, 0, filtered_routes.ids)]
+            if record.warehouse_id:
+                routes = self.env['stock.location.route'].sudo().search([
+                    ('warehouse_ids', 'in', record.warehouse_id.id)
+                ])
+                record.route_ids = routes
 
     def get_parents(self):
         location = self.location_id
@@ -258,18 +234,19 @@ class StockRequestOrder(models.Model):
                 self.with_context(no_change_childs=True).onchange_warehouse_id()
         self.change_childs()
 
-    @api.onchange("warehouse_id")
-    def onchange_warehouse_id(self):
+    @api.onchange('warehouse_id')
+    def _onchange_warehouse_id(self):
         if self.warehouse_id:
-            # search with sudo because the user may not have permissions
-            loc_wh = self.location_id.warehouse_id
-            if self.warehouse_id != loc_wh:
-                self.location_id = self.warehouse_id.lot_stock_id
-                self.with_context(no_change_childs=True).onchange_location_id()
-            if self.warehouse_id.company_id != self.company_id:
-                self.company_id = self.warehouse_id.company_id
-                self.with_context(no_change_childs=True).onchange_company_id()
-        self.change_childs()
+            routes = self.env['stock.location.route'].sudo().search([
+                ('warehouse_ids', 'in', self.warehouse_id.id)
+            ])
+            self.route_ids = routes.ids
+            # Propagar la ruta predeterminada a las líneas de producto ya existentes
+            for line in self.stock_request_ids:
+                line.route_id = self.route_ids[0] if self.route_ids else False
+        else:
+            self.route_ids = False
+
 
     @api.onchange("procurement_group_id")
     def onchange_procurement_group_id(self):
@@ -296,6 +273,12 @@ class StockRequestOrder(models.Model):
                 line.expected_date = self.expected_date
                 line.requested_by = self.requested_by
                 line.procurement_group_id = self.procurement_group_id
+                # Agregar propagación de ruta y unidad de medida
+                if self.route_ids:
+                    line.route_id = self.route_ids[0]
+                if self.uom_id:
+                    line.product_uom_id = self.uom_id
+
 
     def action_confirm(self):
         if not self.stock_request_ids:
@@ -425,3 +408,17 @@ class StockRequestOrder(models.Model):
         ]
         action["res_id"] = order.id
         return action
+    
+
+    @api.depends('product_id', 'route_id')
+    def _compute_available_qty(self):
+        for line in self:
+            if line.product_id and line.route_id:
+                stock_qty = self.env['stock.quant'].sudo().search([
+                    ('product_id', '=', line.product_id.id),
+                    ('location_id', 'in', line.route_id.mapped('location_ids').ids)
+                ]).quantity
+                line.available_qty = stock_qty
+            else:
+                line.available_qty = 0.0
+

@@ -152,8 +152,8 @@
                                         groups="stock.group_stock_multi_locations"
                                     />
                                     <field name="route_ids" column_invisible="1" />
-                                    <field name="product_uom_qty" />
-                                    <field name="qty_in_progress" optional="show" />
+                                    <field name="product_uom_qty" readonly="1" />
+                                    <field name="qty_in_progress" optional="show" invisible="1" />
                                     <field name="qty_done" optional="show" />
                                     <field name="expected_date" column_invisible="1" />
                                     <field name="picking_policy" column_invisible="1" />
