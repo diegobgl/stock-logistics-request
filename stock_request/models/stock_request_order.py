@@ -231,12 +231,12 @@ class StockRequestOrder(models.Model):
     @api.onchange('warehouse_id')
     def _onchange_warehouse_id(self):
         if self.warehouse_id:
-            # Solo mostrar las ubicaciones hijas de la bodega seleccionada
+            # Filtrar ubicaciones hijas de la bodega y de tipo 'internal' o 'transit'
             return {
                 'domain': {
                     'location_id': [
-                        ('id', 'child_of', self.warehouse_id.view_location_id.id),  # Hijas de la bodega
-                        ('usage', 'in', ['internal', 'transit'])  # Solo tipo 'internal' o 'transit'
+                        ('id', 'child_of', self.warehouse_id.view_location_id.id),
+                        ('usage', 'in', ['internal', 'transit'])
                     ]
                 }
             }
