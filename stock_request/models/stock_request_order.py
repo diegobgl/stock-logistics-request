@@ -254,7 +254,6 @@ class StockRequestOrder(models.Model):
         self.change_childs()
 
 
-
     @api.onchange("procurement_group_id")
     def onchange_procurement_group_id(self):
         self.change_childs()
