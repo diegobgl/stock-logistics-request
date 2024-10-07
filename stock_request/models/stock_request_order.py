@@ -228,29 +228,27 @@ class StockRequestOrder(models.Model):
         self.change_childs()
 
 
-    @api.onchange('warehouse_id')
-    def _onchange_warehouse_id(self):
-        if self.warehouse_id:
-            # Filtrar ubicaciones hijas de la bodega y de tipo 'internal' o 'transit'
-            return {
-                'domain': {
-                    'location_id': [
-                        ('id', 'child_of', self.warehouse_id.view_location_id.id),
-                        ('usage', 'in', ['internal', 'transit'])
-                    ]
-                }
-            }
-        else:
-            # Si no hay bodega seleccionada, no mostrar ubicaciones
-            return {
-                'domain': {
-                    'location_id': [('id', '=', False)]
-                }
-            }        
+#    @api.onchange('warehouse_id')
+#    def _onchange_warehouse_id(self):
+#        if self.warehouse_id:
+#            # Filtrar ubicaciones hijas de la bodega y de tipo 'internal' o 'transit'
+        #     return {
+        #         'domain': {
+        #             'location_id': [
+        #                 ('id', 'child_of', self.warehouse_id.view_location_id.id),
+        #                 ('usage', 'in', ['internal', 'transit'])
+        #             ]
+        #         }
+        #     }
+        # else:
+        #     # Si no hay bodega seleccionada, no mostrar ubicaciones
+        #     return {
+        #         'domain': {
+        #             'location_id': [('id', '=', False)]
+        #         }
+        #     }        
 
     @api.onchange('location_id')
-
-    
     def onchange_location_id(self):
          if self.location_id:
              # Asignar la ubicación a todas las líneas de productos
