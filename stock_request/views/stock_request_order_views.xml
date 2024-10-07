@@ -88,7 +88,7 @@
                                 options="{'no_create': True, 'no_open': True}"
                                 groups="stock.group_stock_multi_locations"
                             />
-                            <field name="location_id" />
+                            <field name="location_id" domain="[('id', 'child_of', warehouse_id.view_location_id.id), ('usage', 'in', ['internal', 'transit'])]"/>
                             <field name="allow_virtual_location" invisible="1" />
                             <field name="route_ids" invisible="1" />
                             <field
