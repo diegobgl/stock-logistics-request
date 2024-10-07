@@ -231,7 +231,7 @@ class StockRequestOrder(models.Model):
     @api.onchange('warehouse_id')
     def _onchange_warehouse_id(self):
         if self.warehouse_id:
-            # Filtrar ubicaciones para que solo se muestren las de la bodega seleccionada
+            # Establecer dinámicamente el dominio para location_id basado en la bodega
             return {
                 'domain': {
                     'location_id': [('id', 'child_of', self.warehouse_id.view_location_id.id)]
@@ -248,7 +248,7 @@ class StockRequestOrder(models.Model):
     @api.onchange('location_id')
     def onchange_location_id(self):
         if self.location_id:
-            # Propagar la ubicación a las líneas de productos
+            # Asignar la ubicación a todas las líneas de productos
             for line in self.stock_request_ids:
                 line.location_id = self.location_id
         self.change_childs()
