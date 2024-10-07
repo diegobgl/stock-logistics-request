@@ -228,20 +228,20 @@ class StockRequestOrder(models.Model):
         self.change_childs()
 
 
-    @api.onchange('warehouse_id')
-    def _onchange_warehouse_id(self):
-        if self.warehouse_id:
-            location_root_id = self.warehouse_id.view_location_id.id
-            print(f"Ubicación raíz de la bodega: {location_root_id}")  # Depuración
-            if location_root_id:
-                return {
-                    'domain': {
-                        'location_id': [
-                            ('id', 'child_of', location_root_id),
-                            ('usage', 'in', ['internal', 'transit'])
-                        ]
-                    }
-                }
+    # @api.onchange('warehouse_id')
+    # def _onchange_warehouse_id(self):
+    #     if self.warehouse_id:
+    #         location_root_id = self.warehouse_id.view_location_id.id
+    #         print(f"Ubicación raíz de la bodega: {location_root_id}")  # Depuración
+    #         if location_root_id:
+    #             return {
+    #                 'domain': {
+    #                     'location_id': [
+    #                         ('id', 'child_of', location_root_id),
+    #                         ('usage', 'in', ['internal', 'transit'])
+    #                     ]
+    #                 }
+    #             }
         
 
     # @api.onchange('location_id')
