@@ -249,6 +249,8 @@ class StockRequestOrder(models.Model):
             }        
 
     @api.onchange('location_id')
+
+    
     def onchange_location_id(self):
          if self.location_id:
              # Asignar la ubicación a todas las líneas de productos
