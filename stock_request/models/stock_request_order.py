@@ -228,7 +228,7 @@ class StockRequestOrder(models.Model):
         self.change_childs()
 
 
-
+    @api.onchange('warehouse_id')
     def _onchange_warehouse_id(self):
         if self.warehouse_id:
             # Reemplazamos 'stock.location.route' por 'stock.route'
