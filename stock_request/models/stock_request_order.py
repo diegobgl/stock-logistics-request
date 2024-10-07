@@ -228,30 +228,32 @@ class StockRequestOrder(models.Model):
         self.change_childs()
 
 
-    @api.onchange("location_id")
-    def onchange_location_id(self):
-        if self.location_id:
-            loc_wh = self.location_id.warehouse_id
-            if loc_wh and self.warehouse_id != loc_wh:
-                self.warehouse_id = loc_wh
-                self.with_context(no_change_childs=True).onchange_warehouse_id()
-        self.change_childs()
-
     @api.onchange('warehouse_id')
     def _onchange_warehouse_id(self):
         if self.warehouse_id:
-            # Reemplazamos 'stock.location.route' por 'stock.route'
-            routes = self.env['stock.route'].sudo().search([
-                ('warehouse_ids', 'in', self.warehouse_id.id)
-            ])
-            self.route_ids = routes.ids
-            # Propagar la ruta predeterminada a las líneas de producto ya existentes
-            for line in self.stock_request_ids:
-                line.route_id = self.route_ids[0] if self.route_ids else False
+            # Filtrar ubicaciones para que solo se muestren las de la bodega seleccionada
+            return {
+                'domain': {
+                    'location_id': [('id', 'child_of', self.warehouse_id.view_location_id.id)]
+                }
+            }
         else:
-            self.route_ids = False
+            # Si no hay bodega seleccionada, no mostrar ubicaciones
+            return {
+                'domain': {
+                    'location_id': [('id', '=', False)]
+                }
+            }
 
-            
+    @api.onchange('location_id')
+    def onchange_location_id(self):
+        if self.location_id:
+            # Propagar la ubicación a las líneas de productos
+            for line in self.stock_request_ids:
+                line.location_id = self.location_id
+        self.change_childs()
+
+
     @api.onchange("procurement_group_id")
     def onchange_procurement_group_id(self):
         self.change_childs()
