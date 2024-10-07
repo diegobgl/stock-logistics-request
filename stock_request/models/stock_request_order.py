@@ -247,13 +247,13 @@ class StockRequestOrder(models.Model):
                     'location_id': [('id', '=', False)]
                 }
             }
-    # @api.onchange('location_id')
-    # def onchange_location_id(self):
-    #     if self.location_id:
-    #         # Asignar la ubicación a todas las líneas de productos
-    #         for line in self.stock_request_ids:
-    #             line.location_id = self.location_id
-    #     self.change_childs()
+    @api.onchange('location_id')
+    def onchange_location_id(self):
+         if self.location_id:
+             # Asignar la ubicación a todas las líneas de productos
+             for line in self.stock_request_ids:
+                 line.location_id = self.location_id
+         self.change_childs()
 
 
     @api.onchange("procurement_group_id")
