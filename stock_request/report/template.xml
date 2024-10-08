@@ -34,16 +34,16 @@
                         </div>
                     </t>
                 </t>
-    </template>
+         </template>
 
-    <record id="action_report_stock_request_order" model="ir.actions.report">
-        <field name="name">Stock Request Order Report</field>
-        <field name="model">stock.request.order</field>
-        <field name="report_type">qweb-pdf</field>
-        <field name="report_name">stock_request_order.report_stock_request_order_template</field>
-        <field name="report_file">stock_request_order.report_stock_request_order_template</field>
-        <field name="binding_model_id" ref="stock_request.model_stock_request_order"/>
-    </record>
-    
+        <record id="action_report_stock_request_order" model="ir.actions.report">
+            <field name="name">Stock Request Order Report</field>
+            <field name="model">stock.request.order</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">stock_request_order.report_stock_request_order_template</field>
+            <field name="report_file">stock_request_order.report_stock_request_order_template</field>
+            <field name="binding_model_id" ref="stock_request.model_stock_request_order"/>
+        </record>
+
 </odoo>
 
