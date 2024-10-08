@@ -1,0 +1,34 @@
+<template id="report_stock_request_order_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="o">
+            <div class="page">
+                <h2>Stock Request Order</h2>
+                <p><strong>Order Name:</strong> <t t-esc="o.name"/></p>
+                <p><strong>Requested By:</strong> <t t-esc="o.requested_by.name"/></p>
+                <p><strong>Warehouse:</strong> <t t-esc="o.warehouse_id.name"/></p>
+                <p><strong>Location:</strong> <t t-esc="o.location_id.name"/></p>
+                <p><strong>Expected Date:</strong> <t t-esc="o.expected_date"/></p>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Available Stock</th>
+                            <th>UoM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.stock_request_ids" t-as="line">
+                            <tr>
+                                <td><t t-esc="line.product_id.name"/></td>
+                                <td><t t-esc="line.product_uom_qty"/></td>
+                                <td><t t-esc="line.available_qty"/></td>
+                                <td><t t-esc="line.product_uom_id.name"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </t>
+</template>

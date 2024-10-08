@@ -18,6 +18,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
+                    <button name="action_print_report" type="object" string="Print Report" class="btn-primary"/>
                     <button
                         name="action_confirm"
                         string="Confirm"
@@ -219,10 +220,21 @@
             </search>
         </field>
     </record>
+
     <record model="ir.actions.act_window" id="stock_request_order_action">
         <field name="name">Stock Request Orders</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">stock.request.order</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <record id="action_report_stock_request_order" model="ir.actions.report">
+        <field name="name">Stock Request Order Report</field>
+        <field name="model">stock.request.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">stock_request_order.report_stock_request_order_template</field>
+        <field name="report_file">stock_request_order.report_stock_request_order_template</field>
+        <field name="binding_model_id" ref="model_stock_request_order"/>
+    </record>
+
 </odoo>
