@@ -136,6 +136,7 @@
                                         name="allowed_uom_categ_id"
                                         column_invisible="1"
                                     />
+                                    <field name="available_qty" readonly="1" string="Available Stock"/>
                                     <!--field
                                         name="product_uom_id "
                                         options="{'no_open': True, 'no_create': True}"
