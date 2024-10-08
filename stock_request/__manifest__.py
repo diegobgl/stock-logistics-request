@@ -22,6 +22,7 @@
         "views/res_config_settings_views.xml",
         "views/stock_request_menu.xml",
         "data/stock_request_sequence_data.xml",
+        "report/report_stock_request_order.xml"
     ],
     "installable": True,
 }
