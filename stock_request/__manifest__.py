@@ -11,8 +11,8 @@
     "category": "Warehouse Management",
     "depends": ["stock"],
     "data": [
-        "report/template.xml",
-        "report/report_stock_request_order.xml",
+        "report/order_report.xml",
+        "report/report_stock_request_order_template.xml",
         "security/stock_request_security.xml",
         "security/ir.model.access.csv",
         "views/product.xml",
