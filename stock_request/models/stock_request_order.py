@@ -427,25 +427,4 @@ class StockRequestOrder(models.Model):
             else:
                 line.available_qty = 0.0
 
-    @api.depends('product_id', 'route_id')
-    def _compute_available_qty(self):
-        for line in self:
-            if line.product_id and line.route_id:
-                # Obtener la ubicación de origen asociada con la ruta seleccionada
-                route = line.route_id
-                # Obtener la ubicación de origen de la ruta (de la primera regla asociada)
-                location_origin = route.rule_ids.filtered(lambda r: r.location_src_id).mapped('location_src_id')
-                
-                # Si hay una ubicación de origen en la ruta, calcular el stock disponible
-                if location_origin:
-                    stock_qty = self.env['stock.quant'].sudo().search([
-                        ('product_id', '=', line.product_id.id),
-                        ('location_id', '=', location_origin[0].id)  # Usamos la primera ubicación de origen de la regla
-                    ]).quantity
-                    line.available_qty = stock_qty
-                else:
-                    line.available_qty = 0.0
-            else:
-                line.available_qty = 0.0
-
 
