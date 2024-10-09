@@ -138,11 +138,12 @@
                                         column_invisible="1"
                                     />
                                     <field name="available_qty" readonly="1" string="Available Stock"/>
-                                    <!--field
+                                    <field
                                         name="product_uom_id "
                                         options="{'no_open': True, 'no_create': True}"
                                         groups="uom.group_uom" 
-                                    /-->
+                                        column_invisible="1" 
+                                    />
                                     <field
                                         name="route_id"
                                         options="{'no_create': True}"
@@ -238,4 +239,11 @@
     </record>
 
 
+    <record id="action_report_stock_request_order" model="ir.actions.report">
+        <field name="name">Stock Request Order Report</field>
+        <field name="model">stock.request.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">stock_request_order.report_stock_request_order_template</field>
+        <field name="print_report_name">'Stock Request Order - ' + object.name</field>
+    </record>
 </odoo>
