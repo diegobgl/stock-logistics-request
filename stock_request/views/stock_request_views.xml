@@ -22,11 +22,11 @@
                 />
                 <field name="product_id" />
                 <field name="allowed_uom_categ_id" column_invisible="1" />
-                <field
+                <!--field
                     name="product_uom_id"
                     options="{'no_open': True, 'no_create': True}"
                     groups="uom.group_uom"
-                />
+                /-->
                 <field name="product_uom_qty" />
                 <field name="qty_in_progress" />
                 <field name="qty_done" optional="show" />
@@ -213,13 +213,13 @@
                                     readonly="state != 'draft'"
                                 />
                                 <field name="allowed_uom_categ_id" invisible="1" />
-                                <field
+                                <!--field
                                     name="product_uom_id"
                                     class="oe_inline"
                                     options="{'no_open': True, 'no_create': True}"
                                     groups="uom.group_uom"
                                     readonly="state != 'draft'"
-                                />
+                                /-->
                             </div>
                             <field
                                 name="qty_in_progress"
