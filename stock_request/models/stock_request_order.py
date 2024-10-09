@@ -428,5 +428,5 @@ class StockRequestOrder(models.Model):
                 line.available_qty = 0.0
 
     # #funcion imprimir reporte 
-    # def action_print_report(self):
-    #     return self.env.ref('stock_request_order.action_report_stock_request_order').report_action(self)
+    def action_print_report(self):
+       return self.env.ref('stock_request_order.action_report_stock_request_order').report_action(self)
