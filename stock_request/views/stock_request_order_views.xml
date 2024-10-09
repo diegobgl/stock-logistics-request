@@ -18,7 +18,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_report_stock_request_order" string="Imprimir Reporte" type="action" class="btn-primary"/>
+                    <button name="action_report_stock_request_order" string="Imprimir Reporte" type="object" class="btn-primary"/>
                     <button
                         name="action_confirm"
                         string="Confirm"
