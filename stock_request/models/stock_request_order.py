@@ -429,4 +429,4 @@ class StockRequestOrder(models.Model):
 
     # #funcion imprimir reporte 
     def action_print_report(self):
-       return self.env.ref('stock_request_order.action_report_stock_request_order').report_action(self)
+       return self.env.ref('stock_request_order.action_report_stock_request_template').report_action(self)
