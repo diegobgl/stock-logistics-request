@@ -106,19 +106,6 @@
                         </setting>
                     </block>
                     <h2>Analytic</h2>
-                    <block id="stock_request_analytic">
-                        <setting>
-                            <field
-                                name="module_stock_request_analytic"
-                                string="Enable Analytic Accounting in Stock Requests"
-                            />
-                            <div class="content-group">
-                                <div class="text-muted">
-                                    Analytic accounting in Stock Requests
-                                </div>
-                            </div>
-                        </setting>
-                    </block>
                 </app>
             </xpath>
         </field>

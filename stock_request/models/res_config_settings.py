@@ -26,9 +26,9 @@ class ResConfigSettings(models.TransientModel):
         related="company_id.stock_request_allow_virtual_loc", readonly=False
     )
 
-    module_stock_request_analytic = fields.Boolean(
-        string="Stock Requests Analytic integration"
-    )
+ #   module_stock_request_analytic = fields.Boolean(
+  #      string="Stock Requests Analytic integration"
+   # )
 
     module_stock_request_submit = fields.Boolean(
         string="Submitted state in Stock Requests"
